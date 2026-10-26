@@ -4,6 +4,8 @@ include('db.php');
 
 $errors = [];
 
+
+
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
@@ -22,7 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     }
 
     // " ynzon salas "
-
     $result = pg_query_params($conn, 'SELECT username FROM users WHERE username = $1', [$username]);
 
     if (pg_fetch_assoc($result)) {
@@ -32,11 +33,9 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     if ($password != $confirmPassword) {
         $errors[] = "Password did not match";
     }
-
     if (empty($password) || empty($confirmPassword)) {
         $errors[] = "Please provide a passsword";
     }
-
     $pattern = '/^(?=.*[A-Z])(?=.*[a-z])(?=.*[\W_]).+$/';
 
     if (!preg_match($pattern, $password)) {
@@ -48,7 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     }
 
     $passwordHash = password_hash($password, PASSWORD_BCRYPT);
-
     if (empty($errors)) {
         pg_query_params(
             $conn,
@@ -77,10 +75,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         <label for="username">Username:</label>
         <input type="text" name="username" value="<?php echo (isset($_POST['username'])) ? $_POST['username'] : ""; ?>">
         <br><br>
-        <label for="password">Password:
+        <label for="password">Password:</label>
         <input type="password" name="password">
         <br><br>
-        <label for="confirm password">Confirm Password:
+        <label for="confirm password">Confirm Password:</label>
         <input type="password" name="confirm_password">
         <br><br>
         <button type="submit">Register</button>
